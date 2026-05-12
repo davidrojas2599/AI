@@ -1,4 +1,12 @@
+import os
+
 import requests
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def generate_x_post(usr_input: str) -> str:
     payload = {
@@ -10,7 +18,7 @@ def generate_x_post(usr_input: str) -> str:
         json=payload,
         headers={
             "Content-Type": "application/json",
-            "Authorization": "Bearer adfssdf"
+            "Authorization": f"Bearer {OPENAI_API_KEY}"
         }
     )
     response.raise_for_status()
