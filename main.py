@@ -4,8 +4,9 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI()
+# not need as its called directly from OpenAI()
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def generate_x_post(topic: str) -> str:
     prompt = f"""
@@ -16,21 +17,13 @@ def generate_x_post(topic: str) -> str:
         Here's the topic for the post: {topic}
   
     """
-    payload = {"model": "gpt-4o", "input": prompt}
-    response = requests.post(
-        "https://api.openai.com/v1/responses",
-        json=payload,
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {OPENAI_API_KEY}",
-        },
+    response = client.responses.create(
+        model="gpt-4o",
+        input=prompt
+        
     )
 
-    response_text = (
-        response.json().get("output", [{}])[0].get("content", [{}])[0].get("text", "")
-    )
-
-    return response_text
+    return response.output
 
 
 def main():
