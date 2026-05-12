@@ -8,10 +8,21 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-def generate_x_post(usr_input: str) -> str:
+def generate_x_post(topic: str) -> str:
+    prompt = f"""
+        You are a partner account manager of TCS, a GSI partner at Red Hat. You are responsicble for creating new solutions to take to market with TCS.
+        You have a goals of 220 million for the year. Look for opportunities to create new solutions with TCS to reach that goal. 
+        create a Linkedin post on technology that is relevant to TCS and Red Hat's partnership. The post should be engaging and informative, highlighting the benefits of the partnership and how it can help businesses achieve their goals.
+        The post should also include a call to action, encouraging readers to learn more about the partnership and how it can help them.
+        Here's the topic for the post:
+        <topic>
+        {topic}
+        </topic>
+    """
+    
     payload = {
         "model": "gpt-4.1-mini",
-        "input": usr_input
+        "input": prompt
     }
     response = requests.post(
         "https://api.openai.com/v1/responses",
@@ -21,9 +32,10 @@ def generate_x_post(usr_input: str) -> str:
             "Authorization": f"Bearer {OPENAI_API_KEY}"
         }
     )
-    response.raise_for_status()
-    data = response.json()
-    return data.get("output", [{}])[0].get("content", [{}])[0].get("text", "")
+    
+    response__text = response.json().get("output", [{}])[0].get("content", [{}])[0].get("text", "")
+
+    return response__text
 
 
 def main():
