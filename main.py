@@ -21,8 +21,10 @@ def generate_x_post(topic: str) -> str:
     """
     
     payload = {
-        "model": "gpt-4.1-mini",
-        "input": prompt
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "user", "content": prompt}
+        ]
     }
     response = requests.post(
         "https://api.openai.com/v1/responses",
@@ -37,11 +39,22 @@ def generate_x_post(topic: str) -> str:
     )
     return response__text
 
+# Check if the request was actually successful
+    if response.status_code != 200:
+        return f"Error: {response.status_code} - {response.text}"
+
+    # Correct Parsing logic
+    data = response.json()
+    try:
+        return data['choices'][0]['message']['content']
+    except (KeyError, IndexError):
+        return "Failed to parse the response."
 
 def main():
     # take user input => LLM to generate X post => output post
 
     usr_input = input("what should the post be about? ")
+    print("\nGenerating... please wait.\n")
     x_post = generate_x_post(usr_input)
     print("Generated X post")
     print(x_post)
