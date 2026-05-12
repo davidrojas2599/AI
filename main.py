@@ -23,7 +23,8 @@ def generate_x_post(topic: str) -> str:
         
     )
 
-    return response.output
+    return response.output_text
+
 
 
 def main():
