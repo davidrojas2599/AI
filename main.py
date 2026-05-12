@@ -33,8 +33,8 @@ def generate_x_post(topic: str) -> str:
         }
     )
     
-    response__text = response.json().get("output", [{}])[0].get("content", [{}])[0].get("text", "")
-
+    response__text = (response.json().get("output", [{}])[0].get("content", [{}])[0].get("text", "")
+    )
     return response__text
 
 
