@@ -1,7 +1,6 @@
 import os
-
+from openai import OpenAI
 # Run "uv sync" to install the below packages
-import requests
 from dotenv import load_dotenv
 
 load_dotenv()
